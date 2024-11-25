@@ -4,8 +4,11 @@ from selenium.webdriver.common.keys import Keys
 import time
 import openai
 import os
-from openai.error import RateLimitError
+#from openai.error import RateLimitError
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
+
+#importamos la excepción RateLimitError
+from openai.error import RateLimitError
 
 # Configuración de la API de OpenAI
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -30,6 +33,7 @@ def call_endpoint(messages):
         except RateLimitError:
             print("Límite de tasa alcanzado, esperando antes de reintentar...")
             time.sleep(10 * (intento + 1))  # Incrementa el tiempo de espera con cada intento
+        
         except Exception as e:
             print(f"Ocurrió un error: {e}")
             return "Lo siento, hubo un problema al procesar tu mensaje."
@@ -37,7 +41,7 @@ def call_endpoint(messages):
 
 def iniciar_sesion_whatsapp():
     options = webdriver.ChromeOptions()
-    options.add_argument('user-data-dir=C:\\Users\\Ryzen\\AppData\\Local\\Google\\Chrome\\User Data\\Default')  # Ruta a tu perfil de usuario de Chrome
+    options.add_argument('user-data-dir=C:\\Users\\luisi\\AppData\\Local\\Google\\Chrome\\User Data\\Default')  # Ruta a tu perfil de usuario de Chrome
     driver = webdriver.Chrome(options=options)
     driver.set_window_size(1024, 720)
     driver.set_window_position(0, 0)
@@ -55,8 +59,12 @@ while True:
         driver.title  # Intenta acceder a la propiedad 'title' para verificar que la ventana está abierta
         
         # Esperar hasta encontrar un mensaje no leído
-        new_message = driver.find_element(By.XPATH, '//*[@id="pane-side"]/descendant::span[contains(@aria-label,"unread")]')
-        new_message.click()
+                # Localizar el span con el mensaje no leído
+        new_message = driver.find_element(By.XPATH, '//*[@id="pane-side"]/descendant::span[contains(@aria-label,"no leído")]')
+        
+        # Obtener el div padre del span localizado
+        parent_div = new_message.find_element(By.XPATH, './ancestor::div[1]')
+        parent_div.click()
 
         # Obtener el último mensaje del chat
         last_messages = driver.find_elements(By.XPATH, '//*[@id="main"]/descendant::div[@role="row"]')
