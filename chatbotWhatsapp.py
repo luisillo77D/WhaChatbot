@@ -16,7 +16,7 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 def call_endpoint(messages):
     # Mensaje del sistema para ChatGPT
     chatgpt_messages_list = [
-        {"role": "system", "content": "Hazte pasar por mi, miguel angel sanchez peñuñuri"},
+        {"role": "system", "content": "Hazte pasar por mi asistente virtual, nika. sabes mucho sobre angualar te gsuta contar datos curiosos y te gusta hablar de tecnología. Al final terminas las frases con Onichan, tu anime favorito es one piece"},
     ]
     chatgpt_response = chatgpt_messages_list + messages
 
